@@ -1,0 +1,117 @@
+ts_alarm
+search in(method,
+"createAlarmReportHistory")
+
+| fields TIME_EX, _time, UNITNAME, ALARMID, ALARMCODE, ALARMTEXT, STATE, MACHINENAME, AREANAME, BAYNAME, TYPE, method
+| lookup machine_info MACHINENAME output AREANAME, BAYNAME, TYPE 
+| import ts_alarm
+
+ts_data
+fields - XML, SECSII
+| eval TIME_EX = string(_time, "yyyy-MM-dd HH:mm:ss.SSS")
+| eval CARRIER = nvl(CARRIER, CARRIER_ID), CARRIER = nvl(CARRIER, CARRIERID), CARRIER = nvl(CARRIER, CARRIERNAME), CARRIER = nvl(CARRIER, CARRIER_NAME), CARRIER = nvl(CARRIER, carrier), CARRIER = nvl(CARRIER, carriername), CARRIER = nvl(CARRIER, carrier_name)
+
+| evtctxadd topic=carrier_elapsed key=CARRIER maxrows=10000 timeout=10m COMMAND=="MHSMCS_TRANSPORT_JOB_SCHEDULE_REQ"
+| evalc dummy = if (COMMAND=="MHSMCS_TRANSPORT_JOB_SCHEDULE_REQ", evtctxsetvar("carrier_elapsed", CARRIER , "START_TIME", _time), null)
+| evalc dummy_source_id = if (COMMAND=="MHSMCS_TRANSPORT_JOB_SCHEDULE_REQ", evtctxsetvar("carrier_elapsed", CARRIER , "SOURCE_ID", SOURCE_ID), null)
+| evalc	dummy_source_type = if (COMMAND=="MHSMCS_TRANSPORT_JOB_SCHEDULE_REQ", evtctxsetvar("carrier_elapsed", CARRIER , "SOURCE_TYPE", SOURCE_TYPE), null)
+| evalc	dummy_dest_id = if (COMMAND=="MHSMCS_TRANSPORT_JOB_SCHEDULE_REQ", evtctxsetvar("carrier_elapsed", CARRIER , "DESTINATION_ID", DESTINATION_ID), null)
+| evalc	dummy_dest_type = if (COMMAND=="MHSMCS_TRANSPORT_JOB_SCHEDULE_REQ", evtctxsetvar("carrier_elapsed", CARRIER , "DESTINATION_TYPE", DESTINATION_TYPE), null)
+
+| eval START_TIME = if(COMMAND=="MCSMHS_TRANSPORT_JOB_COMPLETED_EVENT", evtctxgetvar("carrier_elapsed", CARRIER , "START_TIME"), START_TIME),
+SOURCE_ID = if(COMMAND=="MCSMHS_TRANSPORT_JOB_COMPLETED_EVENT", evtctxgetvar("carrier_elapsed", CARRIER , "SOURCE_ID"), SOURCE_ID),
+SOURCE_TYPE = if(COMMAND=="MCSMHS_TRANSPORT_JOB_COMPLETED_EVENT", evtctxgetvar("carrier_elapsed", CARRIER , "SOURCE_TYPE"), SOURCE_TYPE),
+DESTINATION_ID = if(COMMAND=="MCSMHS_TRANSPORT_JOB_COMPLETED_EVENT", evtctxgetvar("carrier_elapsed", CARRIER , "DESTINATION_ID"), DESTINATION_ID),
+DESTINATION_TYPE = if(COMMAND=="MCSMHS_TRANSPORT_JOB_COMPLETED_EVENT", evtctxgetvar("carrier_elapsed", CARRIER , "DESTINATION_TYPE"), DESTINATION_TYPE)
+
+| evtctxadd topic=MERGE_KEY_01 key=COMMANDID timeout=5m MESSAGENAME=="STORAGE-CARRIERTRANSFER"
+| evalc dummy2 = if(MESSAGENAME=="STORAGE-CARRIERTRANSFER", evtctxsetvar("MERGE_KEY_01", COMMANDID, "CARRIER", CARRIER), null)
+| eval CARRIER = if(isnotnull(MESSAGENAME) and CARRIER =="" , evtctxgetvar("MERGE_KEY_01", COMMANDID, "CARRIER"), CARRIER)
+| evtctxdel topic=MERGE_KEY_01 key=COMMANDID MESSAGENAME=="STORAGE-TRANSFERCOMPLETED"
+| evtctxadd topic=MERGE_KEY_02 key=COMMANDID timeout=5m MESSAGENAME=="RAIL-CARRIERTRANSFER"
+| evalc dummy3 = if(MESSAGENAME=="RAIL-CARRIERTRANSFER", evtctxsetvar("MERGE_KEY_02", COMMANDID, "CARRIER", CARRIER), null)
+| eval CARRIER = if(MESSAGENAME=="RAIL-VEHICLEASSIGNED" , evtctxgetvar("MERGE_KEY_02", COMMANDID, "CARRIER"), CARRIER)
+| evtctxdel topic=MERGE_KEY_02 key=COMMANDID MESSAGENAME=="RAIL-VEHICLEASSIGNED"
+| evtctxadd topic=MERGE_KEY_03 key=VEHICLEID timeout=5m MESSAGENAME=="RAIL-VEHICLEASSIGNED"
+| evalc dummy4 = if(MESSAGENAME=="RAIL-VEHICLEASSIGNED", evtctxsetvar("MERGE_KEY_03", VEHICLEID, "CARRIER", CARRIER ), null)
+| eval CARRIER = if(MESSAGENAME=="RAIL-VEHICLEARRIVED" , evtctxgetvar("MERGE_KEY_03", VEHICLEID, "CARRIER"), CARRIER)
+| evtctxdel topic=MERGE_KEY_03 key=COMMANDID MESSAGENAME=="RAIL-VEHICLEARRIVED"
+| evtctxdel topic=carrier_elapsed key=CARRIER COMMAND=="MCSMHS_TRANSPORT_JOB_COMPLETED_EVENT"
+| eval ELAPSED= datediff(START_TIME, _time, "msec"), ELAPSED= concat(string(dateadd(epoch(floor(ELAPSED/1000)), "hour", -9), "HH:mm:ss."), mod(ELAPSED, 1000) )
+
+| lookup machine_info MACHINENAME output AREANAME, BAYNAME, TYPE
+| import ts_data
+
+ts_job_completed
+search COMMAND=="MCSMHS_TRANSPORT_JOB_COMPLETED_EVENT" and method=="sendMessage" and isnotnull(START_TIME)
+| parsemap overlay=t field=MCSMHS_TRANSPORT_JOB_COMPLETED_EVENT 
+| parsemap overlay=t field=JOB_COMPLETED_INFO
+| eval ELAPSED_MSEC = datediff(START_TIME, _time, "msec")
+| fields _time, CARRIER, START_TIME, ELAPSED, ELAPSED_MSEC, DETAIL_LOCATION_ID, LOCATION_ID, REQUESTOR, method, TIME_EX, SOURCE_ID, DESTINATION_ID
+| lookup machine_info LOCATION_ID output AREANAME, BAYNAME, TYPE, MACHINENAME
+| import ts_job_completed
+
+ts_material
+search in(method,
+"createCarrierLocationHistory")
+| fields TIME_EX, _time, CARRIER, LOTID, COMMANDID, UNITNAME, MACHINENAME, AREANAME, BAYNAME, TYPE, method, CURRENTMACHINENAME, CURRENTUNITNAME, TRANSPORTCOMMANDID
+| lookup machine_info MACHINENAME output AREANAME, BAYNAME, TYPE 
+| import ts_material
+
+	ts_resource
+  search in(method,
+"createCraneHistory",
+"createMachineHistory",
+"createShelfHistory",
+"createPortHistory",
+"createVehicleHistory",
+"createStorageFullHistory")
+
+| fields MACHINENAME, CRANENAME, STATE, SUBSTATE, PROCESSINGSTATE, TRANSPORTCOMMANDID, CONNECTIONSTATE, TSCSTATE, PORTNAME, BANNED, OCCUPIED, TRANSPORTUNITACCESSIBLE, CRANEAVAILABLE, INOUTTYPE, MANUAL, ACCESSMODE, IDREADSTATE, SHELFNAME, FULLSTATE, VEHICLENAME, CARRIER, TRANSFERPORTNAME, TIME_EX, _time, method, MESSAGENAME, CONTROLSTATE
+| lookup machine_info MACHINENAME output AREANAME, BAYNAME, TYPE 
+| import ts_resource
+
+	ts_transport
+  search in(method, 
+"createTransportJobHistory",
+"createTransportCommandHistory",
+"createTransportJobFailHistory",
+"createTransportCommandFailHistory")
+| eval TRANS_JOBSTART = if(STATE=="CREATED", TIME_EX, null),
+TRANS_JOBEND = if(STATE=="COMPLETED", TIME_EX, null)
+| evtctxadd topic=trans_job_completed key=TRANSPORTJOBID maxrows=10000 timeout=10m (STATE=="CREATED" and method=="createTransportJobHistory")
+| evalc dummy = if(STATE=="CREATED" and method=="createTransportJobHistory", evtctxsetvar("trans_job_completed", TRANSPORTJOBID, "JOB_START", TIME_EX), null)
+| eval TRANS_JOBSTART = if(STATE=="COMPLETED" and method=="createTransportJobHistory", evtctxgetvar("trans_job_completed", TRANSPORTJOBID, "JOB_START"), null)
+| evtctxdel topic=trans_job_completed key=TRANSPORTJOBID STATE=="COMPLETED" and method=="createTransportJobHistory"
+
+| evtctxadd topic=trans_machine_info key=TRANSPORTJOBID maxrows=10000 timeout=10m (STATE=="CREATED" and method=="createTransportJobHistory")
+| evalc dummy1 = if((STATE=="CREATED" and method=="createTransportJobHistory"), evtctxsetvar("trans_machine_info", TRANSPORTJOBID, "SOURCEMACHINENAME", SOURCEMACHINENAME), null)
+| evalc dummy2 = if((STATE=="CREATED" and method=="createTransportJobHistory"), evtctxsetvar("trans_machine_info", TRANSPORTJOBID, "SOURCEUNITNAME", SOURCEUNITNAME), null)
+| evalc dummy3 = if((STATE=="CREATED" and method=="createTransportJobHistory"), evtctxsetvar("trans_machine_info", TRANSPORTJOBID, "DESTTYPE", DESTTYPE), null)
+| evalc dummy4 = if((STATE=="CREATED" and method=="createTransportJobHistory"), evtctxsetvar("trans_machine_info", TRANSPORTJOBID, "DESTMACHINENAME", DESTMACHINENAME), null)
+| evalc dummy5 = if((STATE=="CREATED" and method=="createTransportJobHistory"), evtctxsetvar("trans_machine_info", TRANSPORTJOBID, "DESTUNITNAME", DESTUNITNAME), null)
+| eval SOURCEMACHINENAME = if((method=="createTransportCommandHistory" or method=="createTransportCommandFailHistory" or method=="createTransportJobHistory" or method=="createTransportJobFailHistory"), evtctxgetvar("trans_machine_info", TRANSPORTJOBID, "SOURCEMACHINENAME"), null)
+| eval SOURCEUNITNAME = if((method=="createTransportCommandHistory" or method=="createTransportCommandFailHistory" or method=="createTransportJobHistory" or method=="createTransportJobFailHistory"), evtctxgetvar("trans_machine_info", TRANSPORTJOBID, "SOURCEUNITNAME"), null)
+| eval DESTTYPE = if((method=="createTransportCommandHistory" or method=="createTransportCommandFailHistory" or method=="createTransportJobHistory" or method=="createTransportJobFailHistory"), evtctxgetvar("trans_machine_info", TRANSPORTJOBID, "DESTTYPE"), null)
+| eval DESTMACHINENAME = if((method=="createTransportCommandHistory" or method=="createTransportCommandFailHistory" or method=="createTransportJobHistory" or method=="createTransportJobFailHistory"), evtctxgetvar("trans_machine_info", TRANSPORTJOBID, "DESTMACHINENAME"), null)
+| eval DESTUNITNAME = if((method=="createTransportCommandHistory" or method=="createTransportCommandFailHistory" or method=="createTransportJobHistory" or method=="createTransportJobFailHistory"), evtctxgetvar("trans_machine_info", TRANSPORTJOBID, "DESTUNITNAME"), null)
+| evtctxdel topic=trans_machine_info key=TRANSPORTJOBID STATE=="COMPLETED" and method=="createTransportJobHistory"
+
+| fields CARRIER, _time, DESTMACHINENAME, DESTUNITNAME, DESTTYPE, method, SOURCEMACHINENAME, TIME_EX, TRANS_JOBSTART, TRANS_JOBEND,
+SOURCEUNITNAME, STATE, STEPID, TRANSPORTJOBID, TRANSPORTCOMMANDID, LOTID,
+FIXEDROUTE, PRIORITY, PROCESSID, BATCHID, DESCRIPTION, REASON,
+SOURCEAREANAME, SOURCEBAYNAME, SOURCEMACHINETYPE, DESTAREANAME, DESTBAYNAME, DESTMACHINETYPE, SOURCEUNITNAME, CREATEUSER, BATCHTYPE, TRANSPORTMACHINENAME, TRANSPORTUNITNAME
+
+| lookup machine_info SOURCEMACHINENAME output AREANAME as SOURCEAREANAME, BAYNAME as SOURCEBAYNAME, TYPE as SOURCEMACHINETYPE
+| lookup machine_info DESTMACHINENAME output AREANAME as DESTAREANAME, BAYNAME as DESTBAYNAME, TYPE as DESTMACHINETYPE
+| lookup machine_info TRANSPORTMACHINENAME output AREANAME as TRANSPORTAREANAME, BAYNAME as TRANSPORTBAYNAME, TYPE as TRANSPORTTYPE
+
+| import ts_transport
+
+ts_xml
+parse psr_ts_selector
+| eval key = nvl(TRANSACTIONID, MACHINENAME), key = concat(string(_time, "yyyyMMddHHmmssSSS"), lpad(rand(1000000), 6, "0"), if(len(key)>1, key, trim(CARRIER)))
+| stream forward=t ts_data
+| search isnotnull(XML)
+| fields key, XML, SECSII
+| import ts_xml
