@@ -1,0 +1,128 @@
+테이블 ts_raw 의 인덱스 ts_raw_idx
+인덱스 상세 정보
+구분	내용
+테이블 이름	ts_raw
+인덱스	ts_raw_idx
+인덱스가 생성된 기간	N/A
+인덱스 대상 기간	2017-02-10 ~ 무제한
+데이터 위치	LocalFilePath [/log1/logpresso-data/araqne-logstorage/index/21/6]
+불룸필터 사용 여부	사용
+토크나이저	구분자
+디스크 사용량	0.00B
+
+ts_data
+테이블 스키마
+주 스토리지	타입	v3p
+압축 방식	deflate
+데이터 배열	columnar
+테이블 저장 디렉터리	/log1/logpresso-data/araqne-logstorage/log/25
+테이블 ts_data 의 인덱스 f_idx
+인덱스 상세 정보
+구분	내용
+테이블 이름	ts_data
+인덱스	f_idx
+인덱스가 생성된 기간	N/A
+인덱스 대상 기간	2017-04-01 ~ 무제한  편집
+데이터 위치	LocalFilePath [/log1/logpresso-data/araqne-logstorage/index/25/66]
+불룸필터 사용 여부	사용
+토크나이저	쿼리 기반 필드 추출
+디스크 사용량	0.00B
+토크나이저 설정
+키	값
+인덱스 토큰 추출 쿼리	fields LEVEL, method, CARRIER, MACHINENAME, AREANAME, BAYNAME, TYPE, COMMANDID, COMMAND, OPERATION_NAME, MESSAGENAME, PROCESS, TRANSACTIONID, THREAD, TEXT, UNITNAME
+
+
+테이블 ts_xml 의 인덱스 f_idx
+인덱스 상세 정보
+구분	내용
+테이블 이름	ts_xml
+인덱스	f_idx
+인덱스가 생성된 기간	N/A
+인덱스 대상 기간	전체  편집
+데이터 위치	LocalFilePath [/log1/logpresso-data/araqne-logstorage/index/23/4]
+불룸필터 사용 여부	사용
+토크나이저	쿼리 기반 필드 추출
+디스크 사용량	0.00B
+토크나이저 설정
+키	값
+인덱스 토큰 추출 쿼리	fields key
+
+
+테이블 ts_alarm 의 인덱스 f_idx
+인덱스 상세 정보
+구분	내용
+테이블 이름	ts_alarm
+인덱스	f_idx
+인덱스가 생성된 기간	N/A
+인덱스 대상 기간	2017-03-27 ~ 무제한  편집
+데이터 위치	LocalFilePath [/log1/logpresso-data/araqne-logstorage/index/57/25]
+불룸필터 사용 여부	사용
+토크나이저	쿼리 기반 필드 추출
+디스크 사용량	0.00B
+토크나이저 설정
+키	값
+인덱스 토큰 추출 쿼리	fields TIME_EX, _time, UNITNAME, ALARMID, ALARMCODE, ALARMTEXT, STATE, MACHINENAME, AREANAME, BAYNAME, TYPE, method
+
+
+테이블 ts_job_completed 의 인덱스 f_idx
+인덱스 상세 정보
+구분	내용
+테이블 이름	ts_job_completed
+인덱스	f_idx
+인덱스가 생성된 기간	N/A
+인덱스 대상 기간	2017-03-14 ~ 무제한  편집
+데이터 위치	LocalFilePath [/log1/logpresso-data/araqne-logstorage/index/32/33]
+불룸필터 사용 여부	사용
+토크나이저	쿼리 기반 필드 추출
+디스크 사용량	0.00B
+토크나이저 설정
+키	값
+인덱스 토큰 추출 쿼리	fields CARRIER, MESSAGENAME, COMMAND, DESTINATION_ID, SOURCE_ID
+
+
+테이블 ts_material 의 인덱스 f_idx
+인덱스 상세 정보
+구분	내용
+테이블 이름	ts_material
+인덱스	f_idx
+인덱스가 생성된 기간	N/A
+인덱스 대상 기간	2017-03-28 ~ 무제한  편집
+데이터 위치	LocalFilePath [/log1/logpresso-data/araqne-logstorage/index/56/28]
+불룸필터 사용 여부	사용
+토크나이저	쿼리 기반 필드 추출
+디스크 사용량	0.00B
+토크나이저 설정
+키	값
+인덱스 토큰 추출 쿼리	fields TIME_EX, _time, CARRIER, LOTID, TRANSPORTCOMMANDID, CURRENTUNITNAME, CURRENTMACHINENAME, AREANAME, BAYNAME, TYPE, method
+
+
+테이블 ts_resource 의 인덱스 f_idx
+인덱스 상세 정보
+구분	내용
+테이블 이름	ts_resource
+인덱스	f_idx
+인덱스가 생성된 기간	N/A
+인덱스 대상 기간	2017-04-01 ~ 무제한  편집
+데이터 위치	LocalFilePath [/log1/logpresso-data/araqne-logstorage/index/55/72]
+불룸필터 사용 여부	사용
+토크나이저	쿼리 기반 필드 추출
+디스크 사용량	0.00B
+토크나이저 설정
+키	값
+인덱스 토큰 추출 쿼리	fields MACHINENAME, AREANAME, BAYNAME, TYPE, CRANENAME, STATE, SUBSTATE, PROCESSINGSTATE, TRANSPORTCOMMANDID, CONNECTIONSTATE, TSCSTATE, PORTNAME, BANNED, OCCUPIED, TRANSPORTUNITACCESSIBLE, CRANEAVAILABLE, INOUTTYPE, MANUAL, ACCESSMODE, IDREADSTATE, SHELFNAME, FULLSTATE, VEHICLENAME, CARRIER, TRANSPORTNAME, TIME_EX, _time, method, TRANSFERPORTNAMEfields LEVEL, method, CARRIER, MACHINENAME, AREANAME, BAYNAME, TYPE, COMMANDID, COMMAND, OPERATION_NAME, MESSAGENAME, PROCESS, TRANSACTIONID, THREAD, TEXT, UNITNAME
+
+
+테이블 ts_transport 의 인덱스 f_idx
+인덱스 상세 정보
+구분	내용
+테이블 이름	ts_transport
+인덱스	f_idx
+인덱스가 생성된 기간	N/A
+인덱스 대상 기간	2017-03-28 ~ 무제한  편집
+데이터 위치	LocalFilePath [/log1/logpresso-data/araqne-logstorage/index/54/29]
+불룸필터 사용 여부	사용
+토크나이저	쿼리 기반 필드 추출
+디스크 사용량	0.00B
+토크나이저 설정
+키	값
+인덱스 토큰 추출 쿼리	fields CARRIER, method, STATE, STEPID, TRANSPORTJOBID, TRANSPORTCOMMANDID, LOTID, FIXEDROUTE, PRIORITY, PROCESSID, BATCHID, DESCRIPTION, REASON, SOURCEMACHINENAME, SOURCEUNITNAME, SOURCEAREANAME, SOURCEBAYNAME, DESTMACHINENAME, DESTUNITNAME, DESTAREANAME, DESTBAYNAME, DESTTYPE
