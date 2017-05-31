@@ -2,3 +2,11 @@ eval line = replace(line,"\n","@")
 | rex field=line "\[(?<Time>\d{2}-\d{2} \d{2}:\d{2}:\d{2} \d{3})\]\s+\[T:(?<THREADID>.*?)\]\s+\[\w:(?<LEVEL>\w+)\]\s+\[(?<CLASSINFO>\S+)\]\s+\[\w+:(?<PKG>\w+)\](?<TEXT>.*)" 
 | rex field=TEXT "\[TXN:(?<TRANSACTIONID>\w+)\]\[CN:(?<CN>\w+)\]\D+?(?<LOGTYPE>\D{2}?\w?)" 
 | eval LOGTYPE =  if(contains(LOGTYPE, "F:"),substr(LOGTYPE, indexof(LOGTYPE, "F:")+2), null), line=replace(line,"@","\n"), TEXT=replace(TEXT,"@","\n")
+
+//수정전
+\[\d{2}-\d{2} \d{2}:\d{2}:\d{2} \d{3}\]\s*\[T:(?<THREADID>\S+)\]\s*\[L:(?<LEVEL>\S+)\]\s*\[(?<CLASSINFO>\S+)\]\s*(?:(?:\[PKG:)?(?<PKG>\S[^\]]+)?(?:\]))?\s*(?:(?:\[TXN:)?(?<TRANSACTIONID>\S[^\]]+)?(?:\]))?\s*(?:(?:\[CN:)?(?<CN>\S[^\]]+)?(?:\]))?\s*(?:(?:\[F:)?(?<LOGTYPE>\S[^\]]+)?(?:\]))?\s*(?<TEXT>.*)
+
+//수정후
+eval line=replace(line,"\n","@") 
+| rex field=line "\[\d{2}-\d{2} \d{2}:\d{2}:\d{2} \d{3}\]\s*(?:(?:\[T:)(?<THREADID>\S[^\]]+)(?:\]))?\s*(?:(?:\[L:)(?<LEVEL>\S[^\]]+)(?:\]))?\s*\[(?<CLASSINFO>\S+)\]\s*(?:(?:\[PKG:)(?<PKG>\S[^\]]+)(?:\]))?\s*(?:(?:\[TXN:)(?<TRANSACTIONID>\S[^\]]+)(?:\]))?\s*(?:(?:\[CN:)(?<CN>\S[^\]]+)(?:\]))?\s*(?:(?:\[F:)(?<LOGTYPE>\S[^\]]+)(?:\]))?\s*(?<TEXT>.*)" 
+| eval line=replace(line,"@","\n"), TEXT=replace(TEXT,"@","\n")
