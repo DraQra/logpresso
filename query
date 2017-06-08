@@ -10,3 +10,5 @@ eval line = replace(line,"\n","@")
 eval line=replace(line,"\n","@") 
 | rex field=line "\[\d{2}-\d{2} \d{2}:\d{2}:\d{2} \d{3}\]\s*(?:(?:\[T:)(?<THREADID>\S[^\]]+)(?:\]))?\s*(?:(?:\[L:)(?<LEVEL>\S[^\]]+)(?:\]))?\s*\[(?<CLASSINFO>\S+)\]\s*(?:(?:\[PKG:)(?<PKG>\S[^\]]+)(?:\]))?\s*(?:(?:\[TXN:)(?<TRANSACTIONID>\S[^\]]+)(?:\]))?\s*(?:(?:\[CN:)(?<CN>\S[^\]]+)(?:\]))?\s*(?:(?:\[F:)(?<LOGTYPE>\S[^\]]+)(?:\]))?\s*(?<TEXT>.*)" 
 | eval line=replace(line,"@","\n"), TEXT=replace(TEXT,"@","\n")
+
+[06-08 15:03:22 859] [T:RvThread#6] [L:INFO] [command.GetQueryList.info] [PKG:BIZ][TXN:QUERY120000001370][CN:GetQueryList][F:POSTACTION] sdjfhsjdf sdhfjshe dhfksje dfhkjeh  aldkfle dlhjke
