@@ -59,3 +59,6 @@ FILENAME=="*R2R_2*"	apc_r2r_parse_selector
 FILENAME=="*EAP*"	apc_mes_parse_selector
 FILENAME=="*MES*"	apc_mes_parse_selector
 FILENAME=="*TRACE*"	apc_trace
+
+//pcap
+pcapdecode | search src_port == 3600 | eval ascii = decode(payload) , ascii = substr(ascii, indexof(ascii, "OHT")-2 ) | fields _time, ascii | parse oht_selector | fields - ascii | import oht_udpp
