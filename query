@@ -12,3 +12,50 @@ eval line=replace(line,"\n","@")
 | eval line=replace(line,"@","\n"), TEXT=replace(TEXT,"@","\n")
 
 [06-08 15:03:22 859] [T:RvThread#6] [L:INFO] [command.GetQueryList.info] [PKG:BIZ][TXN:QUERY120000001370][CN:GetQueryList][F:POSTACTION] sdjfhsjdf sdhfjshe dhfksje dfhkjeh  aldkfle dlhjke
+
+
+//apc 파서
+apc_das2	쿼리 기반 파서	
+쿼리: eval line=replace(line,"\n","@"), VARIABLES=substr(line,indexof(line, "@")), VARIABLES=if(len(VARIABLES)==1, null, VARIABLES), VARIABLES=replace(VARIABLES,"@","\n"), VARIABLES=replace(VARIABLES,"}","") | rex field=line "\{(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3})\s+(?<METHOD>\S+)\s+(?<ACTION>\S+)\s+(?<INTERFACE>\S+)\s+(?<QUERY>(\S+\s+)*?)@"
+
+apc_das2_jobmanager	쿼리 기반 파서	
+쿼리: rex field=line "\{(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3})\s+(?<METHOD>\S+)\s+(?<ACTION>\S+)\s+(?<INTERFACE>\S+)\s+Cached job info :(?<CACHEDJOBINFO>.*)}"
+
+apc_das2_parse_selector	파서 선택기	
+조건식	반환값
+line=="*JobManager*"	apc_das2_jobmanager
+line=="*DAS2*"	apc_das2
+
+apc_mes	쿼리 기반 파서	
+쿼리: rex field=line "\{(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3})\s+[\[]*(?<LOGTYPE>[a-zA-Z]+)*[\]]*\s+\[EQP_ID:(?<EQPID>\S+)\]\s+(?<TEXT>.*)}"
+
+apc_mes_parse_selector	파서 선택기	
+조건식	반환값
+line=="*[TID:*"	apc_mes_tid
+line!="*[TID:*"	apc_mes
+
+apc_mes_tid	쿼리 기반 파서	
+쿼리: rex field=line "\{(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3})\s+\[\]\s*\[TID:(?<TRANSACTIONID>.*)\]\s*\[EQP_ID:(?<EQPID>\S+)\]\s*(?<TEXT>.*)" | eval line=replace(line,"\n","@"), COMMAND=substr(line,indexof(line,"@")+1,len(line)-3), COMMAND=replace(COMMAND,"@","\n")
+
+apc_r2r_controller	쿼리 기반 파서	
+쿼리: rex field=line "\{(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3})\s+[\[]*(?<LOGTYPE>[a-zA-Z]+)[\]]*\s+\[SKHR2RController\]\s+\[TID:(?<TRANSACTIONID>\S+)\]\s+\S+\s+\[WORKFLOWNAME:\s*(?<WORKFLOWNAME>\S+)\]\s+\[WORKFLOWTYPE:\s*(?<WORKFLOWTYPE>\S+)\]\s+(?<COMMAND>.*)"
+
+apc_r2r_not_tid	쿼리 기반 파서	
+쿼리: rex field=line "\{(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3})\s+(?<LOGTYPE>\S+)\s+(?<INTERFACE>\S+)\s*(?<ACTIVITYNAME>\S+)\s*(?<ACTION>\S+)\s*(?<TEXT>.*)}"
+
+apc_r2r_parse_selector	파서 선택기	
+조건식	반환값
+line=="*[SKHR2RController]*"	apc_r2r_controller
+line!="*[SKHR2RController]*"	apc_r2r_tid
+line!="*[SKHR2RController]*" and line !="*[TID*"	apc_r2r_not_tid
+
+apc_r2r_tid	쿼리 기반 파서	
+쿼리: rex field=line "\{(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3})\s+[\[]*(?<LOGTYPE>[a-zA-Z]+)[\]]*\s+\[TID:(?<TRANSACTIONID>\S+)\]\s+\[WORKFLOW_NAME:(?<WORKFLOWNAME>\S+)\]\s+\[EVENT_NAME:(?<EVENTNAME>\S+)\]\s+(?<ACTIVITYNAME>[\[]*ACTIVITY_NAME:\S+[\]]*)*\s+(?<TEXT>.*)}" | eval ACTIVITYNAME=substr(ACTIVITYNAME, indexof(ACTIVITYNAME,":")+1, len(ACTIVITYNAME)-1)
+
+apc_raw_parse_selector	파서 선택기	
+조건식	반환값
+FILENAME=="*DAS2*"	apc_das2_parse_selector
+FILENAME=="*R2R_2*"	apc_r2r_parse_selector
+FILENAME=="*EAP*"	apc_mes_parse_selector
+FILENAME=="*MES*"	apc_mes_parse_selector
+FILENAME=="*TRACE*"	apc_trace
