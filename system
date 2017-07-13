@@ -1,0 +1,204 @@
+2017-07-13 15:26:23,070	ERROR	FtpDirectoryWatchLogger
+logpresso ftp: ftp logger failed
+java.net.SocketTimeoutException: connect timed out
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at org.apache.commons.net.ftp.FTPClient._openDataConnection_(FTPClient.java:894)
+	at org.apache.commons.net.ftp.FTPClient._retrieveFileStream(FTPClient.java:1927)
+	at org.apache.commons.net.ftp.FTPClient.retrieveFileStream(FTPClient.java:1918)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.loadFile(FtpDirectoryWatchLogger.java:268)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.runOnce(FtpDirectoryWatchLogger.java:177)
+	at org.araqne.log.api.AbstractLogger.run(AbstractLogger.java:508)
+	at java.lang.Thread.run(Thread.java:745)
+
+2017-07-13 16:34:05,472	ERROR	FtpDirectoryWatchLogger
+logpresso ftp: ftp logger failed
+java.net.SocketTimeoutException: Read timed out
+	at java.net.SocketInputStream.socketRead0(Native Method)
+	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116)
+	at java.net.SocketInputStream.read(SocketInputStream.java:171)
+	at java.net.SocketInputStream.read(SocketInputStream.java:141)
+	at java.io.FilterInputStream.read(FilterInputStream.java:133)
+	at java.io.BufferedInputStream.read1(BufferedInputStream.java:284)
+	at java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+	at java.io.FilterInputStream.read(FilterInputStream.java:107)
+	at org.araqne.log.api.MultilineLogExtractor.extract(MultilineLogExtractor.java:231)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.loadFile(FtpDirectoryWatchLogger.java:282)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.runOnce(FtpDirectoryWatchLogger.java:177)
+	at org.araqne.log.api.AbstractLogger.run(AbstractLogger.java:508)
+	at java.lang.Thread.run(Thread.java:745)
+
+2017-07-13 16:34:05,555	ERROR	FtpDirectoryWatchLogger
+logpresso ftp: ftp dirwatch logger [local\apc_mes] failed
+java.net.SocketTimeoutException: Read timed out
+	at java.net.SocketInputStream.socketRead0(Native Method)
+	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116)
+	at java.net.SocketInputStream.read(SocketInputStream.java:171)
+	at java.net.SocketInputStream.read(SocketInputStream.java:141)
+	at sun.nio.cs.StreamDecoder.readBytes(StreamDecoder.java:284)
+	at sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:326)
+	at sun.nio.cs.StreamDecoder.read(StreamDecoder.java:178)
+	at java.io.InputStreamReader.read(InputStreamReader.java:184)
+	at java.io.BufferedReader.fill(BufferedReader.java:161)
+	at java.io.BufferedReader.readLine(BufferedReader.java:324)
+	at java.io.BufferedReader.readLine(BufferedReader.java:389)
+	at org.apache.commons.net.ftp.FTPFileEntryParserImpl.readNextEntry(FTPFileEntryParserImpl.java:53)
+	at org.apache.commons.net.ftp.FTPListParseEngine.readStream(FTPListParseEngine.java:128)
+	at org.apache.commons.net.ftp.FTPListParseEngine.readServerList(FTPListParseEngine.java:104)
+	at org.apache.commons.net.ftp.FTPClient.initiateListParsing(FTPClient.java:3302)
+	at org.apache.commons.net.ftp.FTPClient.initiateListParsing(FTPClient.java:3271)
+	at org.apache.commons.net.ftp.FTPClient.listFiles(FTPClient.java:2930)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.listFiles(FtpDirectoryWatchLogger.java:225)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.runOnce(FtpDirectoryWatchLogger.java:168)
+	at org.araqne.log.api.AbstractLogger.run(AbstractLogger.java:508)
+	at java.lang.Thread.run(Thread.java:745)
+
+2017-07-13 16:34:05,837	ERROR	FtpDirectoryWatchLogger
+logpresso ftp: ftp logger failed
+java.net.SocketTimeoutException: Read timed out
+	at java.net.SocketInputStream.socketRead0(Native Method)
+	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116)
+	at java.net.SocketInputStream.read(SocketInputStream.java:171)
+	at java.net.SocketInputStream.read(SocketInputStream.java:141)
+	at java.io.FilterInputStream.read(FilterInputStream.java:133)
+	at java.io.BufferedInputStream.read1(BufferedInputStream.java:284)
+	at java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+	at java.io.FilterInputStream.read(FilterInputStream.java:107)
+	at org.araqne.log.api.MultilineLogExtractor.extract(MultilineLogExtractor.java:231)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.loadFile(FtpDirectoryWatchLogger.java:282)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.runOnce(FtpDirectoryWatchLogger.java:177)
+	at org.araqne.log.api.AbstractLogger.run(AbstractLogger.java:508)
+	at java.lang.Thread.run(Thread.java:745)
+
+2017-07-13 16:34:05,866	ERROR	FtpRotationFileLogger
+logpresso ftp: ftp rotation logger [local\mes_eis11] cannot read file
+java.net.SocketTimeoutException: Read timed out
+	at java.net.SocketInputStream.socketRead0(Native Method)
+	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116)
+	at java.net.SocketInputStream.read(SocketInputStream.java:171)
+	at java.net.SocketInputStream.read(SocketInputStream.java:141)
+	at sun.nio.cs.StreamDecoder.readBytes(StreamDecoder.java:284)
+	at sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:326)
+	at sun.nio.cs.StreamDecoder.read(StreamDecoder.java:178)
+	at java.io.InputStreamReader.read(InputStreamReader.java:184)
+	at java.io.BufferedReader.fill(BufferedReader.java:161)
+	at java.io.BufferedReader.readLine(BufferedReader.java:324)
+	at java.io.BufferedReader.readLine(BufferedReader.java:389)
+	at org.apache.commons.net.ftp.FTPFileEntryParserImpl.readNextEntry(FTPFileEntryParserImpl.java:53)
+	at org.apache.commons.net.ftp.FTPListParseEngine.readStream(FTPListParseEngine.java:128)
+	at org.apache.commons.net.ftp.FTPListParseEngine.readServerList(FTPListParseEngine.java:104)
+	at org.apache.commons.net.ftp.FTPClient.initiateListParsing(FTPClient.java:3302)
+	at org.apache.commons.net.ftp.FTPClient.initiateListParsing(FTPClient.java:3271)
+	at org.apache.commons.net.ftp.FTPClient.listFiles(FTPClient.java:2930)
+	at org.logpresso.ftp.FtpRotationFileLogger.findFile(FtpRotationFileLogger.java:354)
+	at org.logpresso.ftp.FtpRotationFileLogger.getCurrentInfo(FtpRotationFileLogger.java:297)
+	at org.logpresso.ftp.FtpRotationFileLogger.runOnce(FtpRotationFileLogger.java:177)
+	at org.araqne.log.api.AbstractLogger.run(AbstractLogger.java:508)
+	at java.lang.Thread.run(Thread.java:745)
+
+2017-07-13 16:34:10,477	ERROR	FtpDirectoryWatchLogger
+logpresso ftp: logger [local\apc_r2r] cannot complete pending command
+
+2017-07-13 16:34:10,844	ERROR	FtpDirectoryWatchLogger	
+logpresso ftp: logger [local\apc_das] cannot complete pending command
+
+2017-07-13 16:34:20,485	ERROR	FtpDirectoryWatchLogger
+logpresso ftp: ftp logger failed
+java.net.SocketTimeoutException: Read timed out
+	at java.net.SocketInputStream.socketRead0(Native Method)
+	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116)
+	at java.net.SocketInputStream.read(SocketInputStream.java:171)
+	at java.net.SocketInputStream.read(SocketInputStream.java:141)
+	at sun.nio.cs.StreamDecoder.readBytes(StreamDecoder.java:284)
+	at sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:326)
+	at sun.nio.cs.StreamDecoder.read(StreamDecoder.java:178)
+	at java.io.InputStreamReader.read(InputStreamReader.java:184)
+	at java.io.BufferedReader.fill(BufferedReader.java:161)
+	at java.io.BufferedReader.read(BufferedReader.java:182)
+	at org.apache.commons.net.io.CRLFLineReader.readLine(CRLFLineReader.java:58)
+	at org.apache.commons.net.ftp.FTP.__getReply(FTP.java:314)
+	at org.apache.commons.net.ftp.FTP.__getReply(FTP.java:294)
+	at org.apache.commons.net.ftp.FTP.sendCommand(FTP.java:483)
+	at org.apache.commons.net.ftp.FTP.sendCommand(FTP.java:608)
+	at org.apache.commons.net.ftp.FTP.sendCommand(FTP.java:582)
+	at org.apache.commons.net.ftp.FTP.pasv(FTP.java:1007)
+	at org.apache.commons.net.ftp.FTPClient._openDataConnection_(FTPClient.java:869)
+	at org.apache.commons.net.ftp.FTPClient._retrieveFileStream(FTPClient.java:1927)
+	at org.apache.commons.net.ftp.FTPClient.retrieveFileStream(FTPClient.java:1918)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.loadFile(FtpDirectoryWatchLogger.java:268)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.runOnce(FtpDirectoryWatchLogger.java:177)
+	at org.araqne.log.api.AbstractLogger.run(AbstractLogger.java:508)
+	at java.lang.Thread.run(Thread.java:745)
+
+2017-07-13 16:39:00,456	ERROR	FtpDirectoryWatchLogger	
+logpresso ftp: ftp logger failed
+java.net.ConnectException: Connection refused (Connection refused)
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at org.apache.commons.net.ftp.FTPClient._openDataConnection_(FTPClient.java:894)
+	at org.apache.commons.net.ftp.FTPClient._retrieveFileStream(FTPClient.java:1927)
+	at org.apache.commons.net.ftp.FTPClient.retrieveFileStream(FTPClient.java:1918)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.loadFile(FtpDirectoryWatchLogger.java:268)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.runOnce(FtpDirectoryWatchLogger.java:177)
+	at org.araqne.log.api.AbstractLogger.run(AbstractLogger.java:508)
+	at java.lang.Thread.run(Thread.java:745)
+
+2017-07-13 16:48:31,093	ERROR	FtpDirectoryWatchLogger
+logpresso ftp: ftp logger failed
+java.net.SocketTimeoutException: connect timed out
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at org.apache.commons.net.ftp.FTPClient._openDataConnection_(FTPClient.java:894)
+	at org.apache.commons.net.ftp.FTPClient._retrieveFileStream(FTPClient.java:1927)
+	at org.apache.commons.net.ftp.FTPClient.retrieveFileStream(FTPClient.java:1918)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.loadFile(FtpDirectoryWatchLogger.java:268)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.runOnce(FtpDirectoryWatchLogger.java:177)
+	at org.araqne.log.api.AbstractLogger.run(AbstractLogger.java:508)
+	at java.lang.Thread.run(Thread.java:745)
+
+2017-07-13 16:57:41,659	ERROR	FtpDirectoryWatchLogger	
+logpresso ftp: ftp logger failed
+java.net.SocketTimeoutException: connect timed out
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at org.apache.commons.net.ftp.FTPClient._openDataConnection_(FTPClient.java:894)
+	at org.apache.commons.net.ftp.FTPClient._retrieveFileStream(FTPClient.java:1927)
+	at org.apache.commons.net.ftp.FTPClient.retrieveFileStream(FTPClient.java:1918)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.loadFile(FtpDirectoryWatchLogger.java:268)
+	at org.logpresso.ftp.FtpDirectoryWatchLogger.runOnce(FtpDirectoryWatchLogger.java:177)
+	at org.araqne.log.api.AbstractLogger.run(AbstractLogger.java:508)
+	at java.lang.Thread.run(Thread.java:745)
+
+2017-07-13 16:57:40,051	ERROR	NodeTableRegistryImpl	
+logpresso federation: cannot sync tables from node [node2]
+com.logpresso.federation.api.NodeTableException$NodeTableSyncException: logpresso federation: cannot obtain table info from node [node2]
+	at com.logpresso.federation.NodeTableRegistryImpl.__fetchRemoteNodeTables(NodeTableRegistryImpl.java:522)
+	at com.logpresso.federation.NodeTableRegistryImpl.fetchRemoteNodeTables(NodeTableRegistryImpl.java)
+	at com.logpresso.federation.NodeTableRegistryImpl.access$300(NodeTableRegistryImpl.java:67)
+	at com.logpresso.federation.NodeTableRegistryImpl$SyncTask.sync(NodeTableRegistryImpl.java:284)
+	at com.logpresso.federation.NodeTableRegistryImpl$SyncTask.run(NodeTableRegistryImpl.java:269)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.araqne.logdb.client.LoginFailureException: invalid-password
+	at org.araqne.logdb.client.AbstractLogDbSession.login(AbstractLogDbSession.java:70)
+	at org.araqne.logdb.client.LogDbClient.connect(LogDbClient.java:407)
+	at com.logpresso.federation.api.NodeConfig.connect(NodeConfig.java:15)
+	at com.logpresso.federation.NodeTableRegistryImpl.__fetchRemoteNodeTables(NodeTableRegistryImpl.java:512)
+	... 7 more
