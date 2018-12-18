@@ -1,0 +1,22 @@
+안녕하세요 비앤지시스템 전현구입니다.
+많은 도움주심에 감사드립니다.
+
+저희가 사용중인 로그프레소에서는 FTP 로 수집한 LogData를 parsing없이 바로 table에 적재한 후,
+ts_raw -> ts_data 로 진행되는 stream 에서 하기 parsing 과정이 진행됩니다.
+
+■ parsing 과정 Info.
+정규표현식을 사용하여 LEVEL, THREAD, OPERATION_NAME, method 컬럼 분류후 나머지 모든 data 는(멀티라인 포함) TEXT 컬럼에 저장합니다
+regex => \[.*\] \[\s*(?<LEVEL>.*)\] \[\s+(?<THREAD>.*)\] \[\S+\.(?<OPERATION_NAME>\S+\.)(?<method>\S+)\] - \[(?s)(?<TEXT>.*)
+이후에는 TEXT 컬럼에서 필요한 Data를 key=value or XML parsing or regex (자체 쿼리함수기능 포함)등의 다양한방식으로 parsing 하여 컬럼을 생성하고 다음 table에 저장합니다
+
+※기존 RDBMS와 많이 달라서 table 생성시 컬럼schema 설정없이 table에 저장후 table 안에서 컬럼이 계속 확장되는 방식입니다.
+※Log Data 대부분이 반정형 data로 포맷이 다양합니다.
+
+전달드린 조회쿼리에서 | fields 이후에 나오는 부분은 컬럼이 맞습니다.
+실제 table에는 더 많은 컬럼들이 있으며 조회시에 해당 컬럼만 select 하여 보여주는 쿼리 입니다.
+
+■ 문의사항
+machbase 에서 정규표현식 이외에 다른방식으로도 parsing을 지원하는지 문의드립니다
+
+사내 메일이 차단된 사업장이라 부득이 모바일로 작성된부분이 있어 text 간격이나 줄바뀜 문제가 있을수 있는점 양해 부탁드립니다
+감사합니다.
