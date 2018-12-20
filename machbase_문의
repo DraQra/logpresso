@@ -1,0 +1,20 @@
+하드웨어 구성
+	index빌드 : 20mb/s, 수집적재 100mb/s
+	권장 하드웨어 사양 및 minimun?
+	
+수집
+	수집기 동작상태 확인 UI monitoring(STOP / START) ??
+	FTP 수집 (rotation file의 경우 (시간단위, 일단위)
+	수집시 table column generation기능?  컬럼추가 등
+	원본데이터 저장방법
+
+저장
+	열기반 테이블 지원?
+	검색결과 캐싱? 인메모리 인덱스 지원?
+
+검색
+	서비스 중 index rebuild 한다면?
+
+분석 및 쿼리지원
+	CEP 지원불가시 대안은?
+	stream join 가능한가?
