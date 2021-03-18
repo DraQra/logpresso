@@ -1,0 +1,62 @@
+textfile ./file/JsonFormat.txt  
+| eval line = split(line, "^")  
+| explode line  
+| search len(line) > 0  
+| groovy jsonTcpParser
+
+tcp 수집 시 패킷크기에 따라 완전한 Log 가 아닌 분리된 로그가 수집될 수 있음
+이경우 이전로그의 시작 과 현재로그의 끝을 하나의 line으로 묶어줘야함.
+
+↓↓↓↓↓↓ groovy ↓↓↓↓↓↓ 
+
+import groovy.transform.CompileStatic;
+import org.araqne.logdb.Row;
+import org.araqne.logdb.RowBatch;
+import org.araqne.logdb.RowPipe;
+import org.araqne.logdb.groovy.GroovyQueryScript;
+
+@CompileStatic
+class jsonTcpParser extends GroovyQueryScript {
+	
+	static String doublequote = "\"";
+	static String startwd = "{" + doublequote + "SendTime";
+	static String endwd = "}]}";
+	
+	String rowLine;
+	String prevRow;
+	String concatRow;
+	
+	def void onRow(Row row) {
+		
+		Map<String,Object> result = row.map();
+
+		for ( String key : result.keySet() ){
+			
+			if(key.equals("line")) {
+				rowLine = row.get(key);
+			
+				if(rowLine.startsWith(startwd)
+					&& rowLine.endsWith(endwd))
+				{
+					row.put(key, rowLine);
+				}
+				else
+				{
+					if(rowLine.startsWith(startwd))
+					{
+						prevRow = row.get(key);
+						row.put(key, null);
+					}
+					else
+					{
+						concatRow = prevRow + rowLine;
+						//concatRow.concat(rowLine);
+						row.put(key, concatRow);
+					}
+					
+				}
+			}	
+		}
+	pipe.onRow(row)
+	}	// end of def
+}
