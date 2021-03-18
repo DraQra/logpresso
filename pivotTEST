@@ -1,0 +1,48 @@
+ table from=2021022610 tag
+| rex field=tag "\D+\d+\.(?<tag_name>\w+)"
+| pivot count by tag_name for tag_name  // row -> col 로 변경함
+|# evtctxadd topic="pivot" key=tag_name timeout=10s true
+|# evalc column = evtctxsetvar("pivot", tag_name, "value", field(field("tag_name")))  // field 명으로 값을 저장
+| fields - tag_name
+| groovy pivotParser
+| eval LEN = len(row)
+| sort limit=1 -LEN
+| eval row = trim(row)
+| parsekv field=row overlay=f kvdelim=":"
+
+
+↓↓↓↓↓↓ groovyScript ↓↓↓↓↓↓
+
+import groovy.transform.CompileStatic;
+import org.araqne.logdb.Row;
+import org.araqne.logdb.RowBatch;
+import org.araqne.logdb.RowPipe;
+import org.araqne.logdb.groovy.GroovyQueryScript;
+
+@CompileStatic
+class jsonTcpParser extends GroovyQueryScript {
+	
+	static String Blank = " ";
+	String value;
+	StringBuilder sb = new StringBuilder();
+	
+	def void onRow(Row row) {
+		
+		Map<String,Object> result = row.map();
+		
+
+		for ( String key : result.keySet() ){
+			
+			if(row.get(key) != null) {
+				
+				value = row.get(key);
+				
+				row.put(key, value);
+				sb.append(key + ":" + value + Blank);
+			}
+		}
+		
+		row.put("row", sb.toString());
+		pipe.onRow(row)
+	}	// end of def
+}
